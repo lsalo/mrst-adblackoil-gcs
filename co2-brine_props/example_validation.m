@@ -27,7 +27,7 @@ figs = true;                        % set to false if you don't want figs
 % (2008), Fig. 2 with Fig.2 in Spycher and Pruess (2005), Fig. 3 with
 % Fig. 4 in Hassanzadeh et al. (2008), and Fig. 5 with Fig. 5d in
 % Hassanzadeh et al. (2008) (T=45 C)
-pvtBrineWithCO2BlackOil(T, P, S, saltVar, vapH2O, figs);
+pvtBrineWithCO2BlackOil(T, P, S, saltVar, vapH2O, false, figs);
 
 
 
@@ -42,7 +42,7 @@ for t = 1:numel(T_val)
     for s = 1:numel(s_val) 
         T = {'C', T_val(t)};
         S = {'m', 'NaCl', s_val(s)};
-        out{t,s} = pvtBrineWithCO2BlackOil(T, P, S, saltVar, vapH2O, false);
+        out{t,s} = pvtBrineWithCO2BlackOil(T, P, S, saltVar, vapH2O, false, false);
     end
 end
 
@@ -124,7 +124,7 @@ hold off
 grid on; ylim([10 20]); xlim([0 600])
 yticks(10:20); xticks(0:100:600)
 set(h, 'Position', [600, 600, 800, 600])
-exportgraphics(h,'untitled.pdf','ContentType','vector')
+%exportgraphics(h,'untitled.pdf','ContentType','vector')
 
 
 %% Comparison with Fig. 8 and 9 in Spycher et al. Geochim Cosmochim Ac (2003)
@@ -136,7 +136,7 @@ vapH2O = false;
 out = cell(numel(T_val),1);
 for t = 1:numel(T_val)
     T = {'C', T_val(t)};
-    out{t} = pvtBrineWithCO2BlackOil(T, P, S, saltVar, vapH2O, false);
+    out{t} = pvtBrineWithCO2BlackOil(T, P, S, saltVar, vapH2O, false, false);
 end
 
 % Plot
@@ -203,7 +203,7 @@ for t = 1:numel(T_val)
     for s = 1:numel(s_val) 
         T = {'C', T_val(t)};
         S = {'m', 'NaCl', s_val(s)};
-        out{t,s} = pvtBrineWithCO2BlackOil(T, P, S, saltVar, vapH2O, false);
+        out{t,s} = pvtBrineWithCO2BlackOil(T, P, S, saltVar, vapH2O, false, false);
     end
 end
 
@@ -242,13 +242,13 @@ mu_h2o_co2_cP = zeros(numel(T_v), numel(P{3}));
 mu_sea_cP = zeros(numel(T_v), numel(P{3}));
 for t = 1:numel(T_v)
     T = {'C', T_v(t)};
-    data = pvtBrineWithCO2BlackOil(T, P, S, saltVar, vapH2O, false);
+    data = pvtBrineWithCO2BlackOil(T, P, S, saltVar, vapH2O, false, false);
     mu_b_cP(t, :) = data.aq.mu_b_cP(1:3);
     mu_aq_cP(t, :) = data.aq.mu_aq_cP(1:3);
-    data2 = pvtBrineWithCO2BlackOil(T, P, S2, saltVar, vapH2O, false);
+    data2 = pvtBrineWithCO2BlackOil(T, P, S2, saltVar, vapH2O, false, false);
     mu_h2o_cP(t,:) = data2.aq.mu_b_cP(1:3);
     mu_h2o_co2_cP(t, :) = data2.aq.mu_aq_cP(1:3);
-    data3 = pvtBrineWithCO2BlackOil(T, P, S3, saltVar, vapH2O, false);
+    data3 = pvtBrineWithCO2BlackOil(T, P, S3, saltVar, vapH2O, false, false);
     mu_sea_cP(t,:) = data3.aq.mu_b_cP(1:3);
 end
 
@@ -480,7 +480,7 @@ vapH2O = false;
 out_d = cell(numel(T_d),1);
 for t = 1:numel(T_d)
     T = {'C', T_d(t)};
-    out_d{t} = pvtBrineWithCO2BlackOil(T, P, S, saltVar, vapH2O, false);
+    out_d{t} = pvtBrineWithCO2BlackOil(T, P, S, saltVar, vapH2O, false, false);
 end
 
 % 2. Viscosity of pure CO2
@@ -526,7 +526,7 @@ vapH2O = false;
 out_v = cell(numel(T_v),1);
 for t = 1:numel(T_v)
     T = {'C', T_v(t)};
-    out_v{t} = pvtBrineWithCO2BlackOil(T, P, S, saltVar, vapH2O, false);
+    out_v{t} = pvtBrineWithCO2BlackOil(T, P, S, saltVar, vapH2O, false, false);
 end
 
 latx = {'interpreter','latex'};
@@ -665,141 +665,4 @@ ylim([0 0.05]); yticks(0:0.01:0.05);
 xlim([0 125]); xticks(0:25:125)
 ylabel('$\mu$ [cP]','fontsize', 14, latx{:})
 set(h, 'Position', [600, 600, 1000, 350])
-exportgraphics(h,'untitled.pdf','ContentType','vector')
-
-%% CO2-water mixture density and viscosity
-
-% Patel & Eubank, J Chem Eng Data (1988) (2, 5% CO2)
-% y_h2o = 0.02, 0.05
-%              T       P2       r2%    P5    r5%
-data_patel = [323.15 0.08929 33.349 0.08553 31.947
-              323.15 0.13145 49.179 0.12593 47.112
-              323.15 0.19337 72.523 0.18526 69.476
-              348.15 0.09625 33.349 0.09220 31.947
-              348.15 0.14174 49.179 0.13579 47.112
-              348.15 0.20860 72.523 0.19985 69.476
-              348.15 0.30669 106.947 0.29385 102.455
-              348.15 0.45026 157.709 0.43144 151.089
-              348.15 0.65965 232.563 0.63211 222.805
-              373.15 0.10321 33.349 0.09887 31.947
-              373.15 0.15202 49.179 0.14564 47.112
-              373.15 0.22380 72.523 0.21442 69.476
-              373.15 0.32920 106.947 0.31542 102.455 
-              373.15 0.48365 157.709 0.46345 151.089
-              373.15 0.70932 232.563 0.67976 222.805 
-              373.15 1.03757 342.941 0.99447 328.558
-              373.15 1.51187 505.698 1.44934 484.496];
-data_patel(:,3) = 1./data_patel(:,3); % Molar volume
-data_patel(:,5) = 1./data_patel(:,5); % "
-
-% Zhang et al., J Supercrit Fluids (2002)
-% T = 308.15, Y_h2o = 0.003
-data_zhang = [12.484 0.7888 
-              10.717 0.7491
-              9.960 0.7248
-              9.557 0.7077
-              9.04  0.6797
-              8.863 0.6674
-              8.681 0.6519
-              8.472 0.6282
-              8.319 0.6038
-              8.188 0.5715
-              8.096 0.5327
-              8.028 0.4961
-              7.968 0.4497
-              7.907 0.4097
-              7.841 0.3748
-              7.752 0.3436];
-
-T_v = [293.15 308.15 323.15 348.15 373.15]-273.15;
-P = [linspace(0.05, 1.5, 10) linspace(2,7.5,10) linspace(7.7, 12.5, 10) linspace(13,60,20)]; % MPa
-y_h2o = [0.003 0.02 0.05];
-y_co2 = 1-y_h2o;
-Mw_gas  = 0.0440095*y_co2 + 0.01801528*y_h2o;
-saltVar = false;
-vapH2O = false;
-out = zeros(numel(P), 10, numel(T_v));
-mu_g = zeros(1,3);
-for t = 1:numel(T_v)
-    a_m = 7.54*10^7 - 4.13*10^4*(T_v(t)+273.15);
-    b_m = 27.8;
-    T = T_v(t)+273.15;
-    for p = 1:numel(P)
-        [V, ~, rho_co2] = pvtCO2RK1949(T, P(p)*10, [a_m, b_m]);
-        rho_gas = Mw_gas/(V/10^6);
-        mu_co2 = viscCO2F1998(T, rho_co2)*1e3; % cP
-        mu_h2o = viscBrineCO2IC2012(T, P(p)*10, 0, 0);
-        for n=1:numel(y_h2o)
-            mu_g(n) = viscGasMixtD1993([y_h2o(n), y_co2(n)], [0.01801528, 0.0440095], [mu_h2o mu_co2/1e3])*1e3;
-        end
-        %     [T_K P_bar rho_co2 rho_g_0.003 rho_g_0.02 rho_g_0.05 mu_co2 mu_g_0.003 mu_g_0.02 mu_g_0.05
-        out(p,:,t) = [T P(p)*10 rho_co2 rho_gas mu_co2 mu_g];
-    end
-end
-
-% Update data Patel with densities
-data_patel = [data_patel(:,1:3) Mw_gas(2)./data_patel(:,3) data_patel(:, 4:5) Mw_gas(3)./data_patel(:,5)];
-
-
-% Max viscosity difference
-T_v = (303.15:10:373.15)-273.15;
-P = {'bar', 'vals', linspace(80,400,50)};
-S = {'m', 'NaCl', 0};
-saltVar = true;
-vapH2O = true;
-v = zeros(numel(T_v), 1);
-idx = zeros(numel(T_v), 1);
-for t = 1:numel(T_v)
-    T = {'C', T_v(t)};
-    out_v = pvtBrineWithCO2BlackOil(T, P, S, saltVar, vapH2O, false);
-    err = abs(out_v.gas.mu_co2_cP(1:end-2) - out_v.gas.mu_g_cP(1:end-2))./out_v.gas.mu_co2_cP(1:end-2);
-    [v(t), idx(t)] = max(err);
-end
-
-
-% Plot
-latx = {'interpreter','latex'};
-col_co2  = repelem([20, 0, 0], 8, 1);
-col_co2(:,1) = [(20:30:250)]/255;
-h=figure(23);
-tiledlayout(1,2,'TileSpacing','compact','Padding','compact')
-nexttile(1)        % ---------
-hold on
-% pd1 = plot(data_holste(1:6,2)*10,data_holste(1:6,end), 'o', 'markerEdgeColor', col_co2(1,:), ...
-%           'displayname', 'Holste (1987)');
-% pd2 = plot(data_fenghour(1:3,2)*10,data_fenghour(1:3,end), 's', 'markerEdgeColor', col_co2(5,:), ...
-%           'displayname', 'Fenghour (1995)');
-p2 = plot(out(:,2,1),out(:,3,2), '-', 'color', col_co2(1,:), 'linewidth', 1, ...
-          'displayname', [num2str(T_v(1)) ' $^\circ$C, pure CO$_2$']); 
-p3 = plot(out(:,2,1),out(:,4,2), '--', 'color', col_co2(1,:), 'linewidth', 1, 'displayname', '0.3% mol');
-p4 = plot(out(:,2,1),out(:,5,2), ':', 'color', col_co2(1,:), 'linewidth', 1, 'displayname', '2% mol');
-p5 = plot(out(:,2,1),out(:,6,2), '-.', 'color', col_co2(1,:), 'linewidth', 1, 'displayname', '5% mol');
-hold off
-grid on;
-ylim([0 1100]); xlim([0 600])
-yticks(0:100:1100); xticks(0:100:600)
-ylabel('$\rho$ [kg/m$^3$]','fontsize', 14, latx{:})
-xlabel('$p$ [bar]', 'fontsize', 14, latx{:})
-leg = legend([p2 p3 p4 p5], 'fontsize', 12, latx{:}, 'location','best');
-leg.BoxFace.ColorType='truecoloralpha';
-leg.BoxFace.ColorData=uint8(255*[1 1 1 0.75]');
-nexttile(2)        % ---------
-hold on
-% pd1 = plot(data_holste(1:6,2)*10,data_holste(1:6,end), 'o', 'markerEdgeColor', col_co2(1,:), ...
-%           'displayname', 'Holste (1987)');
-% pd2 = plot(data_fenghour(1:3,2)*10,data_fenghour(1:3,end), 's', 'markerEdgeColor', col_co2(5,:), ...
-%           'displayname', 'Fenghour (1995)');
-p2 = plot(out(:,2,1),out(:,7,2), '-', 'color', col_co2(1,:), 'linewidth', 1, ...
-          'displayname', [num2str(T_v(1)) ' $^\circ$C, pure CO$_2$']); 
-p3 = plot(out(:,2,1),out(:,8,2), '--', 'color', col_co2(1,:), 'linewidth', 1, 'displayname', '0.3% mol');
-p4 = plot(out(:,2,1),out(:,9,2), ':', 'color', col_co2(1,:), 'linewidth', 1, 'displayname', '2% mol');
-p5 = plot(out(:,2,1),out(:,10,2), '-.', 'color', col_co2(1,:), 'linewidth', 1, 'displayname', '5% mol');
-hold off
-grid on;
-ylim([0 1100]); xlim([0 600])
-yticks(0:100:1100); xticks(0:100:600)
-ylabel('$\rho$ [kg/m$^3$]','fontsize', 14, latx{:})
-xlabel('$p$ [bar]', 'fontsize', 14, latx{:})
-leg = legend([p2 p3 p4 p5], 'fontsize', 12, latx{:}, 'location','best');
-leg.BoxFace.ColorType='truecoloralpha';
-leg.BoxFace.ColorData=uint8(255*[1 1 1 0.75]');
+%exportgraphics(h,'untitled.pdf','ContentType','vector')

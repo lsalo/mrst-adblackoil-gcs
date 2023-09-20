@@ -16,22 +16,21 @@
 %% Initial settings
 % Modules, etc
 clear, clc, close all
-mrstModule add ls-tests ls-utils ad-props deckformat mrst-gui ...
-               ad-core ad-blackoil linearsolvers
+mrstModule add ad-props deckformat mrst-gui ad-core ad-blackoil linearsolvers
 gravity reset on;
 mrstVerbose off
 
 % Model options
-krhyst = 1;         % use relative permeability hysteresis
+krhyst = 0;         % use relative permeability hysteresis
 use_mex = 0;
 use_cpr = 0;
 fine_tstep = 0;     % use finer timesteps than deck
 
 % UPDATE PATHS & Folder Name
-%topDir = 'C:\Users\Lluis\matlab\sim_data\mrst\gcs3D\kr_hyst\';
-%fn   = [pwd '\mrst-dev\mrst-ls\ls-proj\gcs3D\kr-hysteresis\input_files\punq-s3\CASE2.DATA'];
-topDir = '/Users/lluis/Documents/MATLAB/sim_data/mrst/gcs3D/kr_hyst/'; % simulation result saved here
-fn   = [pwd '/mrst-dev/mrst-ls/ls-proj/gcs3D/kr-hysteresis/input_files/punq-s3/CASE2.DATA'];
+topDir = what('kr-hysteresis');
+topDir = [topDir.path '/'];
+input_dir = what('punq-s3');   % make sure gcs3D is on path
+fn = [input_dir.path '/' 'CASE2.DATA'];
 if krhyst == 1
     folderName = 'case2_hyst';
 else
@@ -135,7 +134,7 @@ end
 model.operators.pv(cellsb) = model.operators.pv(cellsb)*1e3;
 model.FlowPropertyFunctions = ...
 model.FlowPropertyFunctions.setStateFunction('RelativePermeability', ...
-                                             MyRelativePermeability(model));
+                                             HystereticRelativePermeability(model));
 % Specify Outputs (these can also be computed after the simulation run via model.getProp)
 %model.OutputStateFunctions = {'ComponentTotalMass','RelativePermeability', 'Density', ...
 %                              'Mobility', 'PhasePressures', 'PoreVolume', 'ShrinkageFactors', 'Viscosity'};

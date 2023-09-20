@@ -634,10 +634,10 @@ if figs == 1
     
     h1 = figure(1); % Compare with Fig. 8 in Spycher et al. (2003)
     yyaxis left
-    plot(p,t.gas.Z_co2, 'color', col_co2(1,:),'linewidth', 1); grid on; ylim([0 1]);
+    plot(t.P_bar,t.gas.Z_co2, 'color', col_co2(1,:),'linewidth', 1); grid on; ylim([0 1]);
     ylabel('$Z$ [-]','fontsize', 14, latx{:})
     yyaxis right
-    plot(p,t.gas.phi_co2, 'color', col_co2(1,:), 'LineStyle', '--', 'linewidth', 1); grid on;
+    plot(t.P_bar,t.gas.phi_co2, 'color', col_co2(1,:), 'LineStyle', '--', 'linewidth', 1); grid on;
     ylim([0 1]);
     ylabel('$\phi$ [-]','fontsize', 14, latx{:})
     xlabel('$p$ [bar]','fontsize', 14, latx{:})
@@ -657,10 +657,10 @@ if figs == 1
     
     h2 = figure(2); % Compare with Fig. 2 in Spycher and Pruess (2005)
     yyaxis left
-    plot(p,t.aq.m_co2,'color', col_co2(1,:)); grid on; ylim([0 2]);
+    plot(t.P_bar,t.aq.m_co2,'color', col_co2(1,:)); grid on; ylim([0 2]);
     ylabel('CO$_{2(aq)}$ [m]','fontsize', 14, latx{:})
     yyaxis right
-    plot(p,t.gas.Y_h2o*1000,'color', col_brine, 'LineStyle', '--'); grid on; ylim([4 14]);
+    plot(t.P_bar,t.gas.Y_h2o*1000,'color', col_brine, 'LineStyle', '--'); grid on; ylim([4 14]);
     ylabel('$\Psi_{\mathrm{H}_2\mathrm{O}}\times10^3$ [-]','fontsize', 14, ...
         latx{:})
     xlabel('$p$ [bar]','fontsize', 14, latx{:})
@@ -680,10 +680,10 @@ if figs == 1
     
     h3 = figure(3); % Compare with Fig. 4 in Hassanzadeh et al. (2008)
     yyaxis left
-    plot(p/10,t.aq.x_co2,'color', col_co2(1,:)); grid on; ylim([0.005 0.03]);
+    plot(t.P_bar/10,t.aq.x_co2,'color', col_co2(1,:)); grid on; ylim([0.005 0.03]);
     ylabel('$\chi_{\mathrm{CO}_2}$ [-]','fontsize', 14, latx{:})
     yyaxis right
-    plot(p/10,t.gas.y_h2o,'color', col_brine, 'LineStyle', '--'); grid on; ylim([0 0.03]);
+    plot(t.P_bar/10,t.gas.y_h2o,'color', col_brine, 'LineStyle', '--'); grid on; ylim([0 0.03]);
     ylabel('$\psi_{\mathrm{H}_2\mathrm{O}}\times10^3$ [-]','fontsize', 14, ...
         latx{:})
     xlabel('$p$ [MPa]','fontsize', 14, latx{:})
@@ -704,7 +704,7 @@ if figs == 1
     h4 = figure(4); % Compare with Fig. 5 in Hassanzadeh et al. (2008). Typo in
     % their caption, T should be 45C.
     yyaxis left
-    plot(p/10, t.aq.Rs_Sm3Sm3, 'color', col_co2(1,:),'linewidth', 1);
+    plot(t.P_bar/10, t.aq.Rs_Sm3Sm3, 'color', col_co2(1,:),'linewidth', 1);
     %ylim([0 20])
     ylabel('R$_s$ [Sm$^3$ CO$_2$/Sm$^3$ brine]','fontsize', 14, latx{:})
     %set(gca,'Ytick',[0 5 10 15 20])
@@ -712,7 +712,7 @@ if figs == 1
     ax.YAxis(1).Color = col_co2(1,:); ax.YAxis(1).FontSize = 12;
     ytl = get(gca, 'YTick');
     yyaxis right
-    plot(p/10, t.aq.B_aq_m3Sm3, 'color', col_brine, 'LineStyle', '--','linewidth',1); grid on;
+    plot(t.P_bar/10, t.aq.B_aq_m3Sm3, 'color', col_brine, 'LineStyle', '--','linewidth',1); grid on;
     %ylim([1.012 1.032]); 
     %set(gca,'Ytick',[1.012 1.016 1.020 1.024 1.028 1.032])
     ylabel('B$_b$ [m$^3$/Sm$^3$]','fontsize', 14, latx{:})

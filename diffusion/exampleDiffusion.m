@@ -36,17 +36,18 @@ mrstVerbose on
 
 %% Output directory and options
 
-% Paths. You'll have to update these!
-outputDir = 'C:\Users\lsalo\matlab\sim_data\mrst\gcs3D\diff\';
-%outputDir = '/Users/lluis/Documents/MATLAB/sim_data/mrst/gcs3D/diff/';
-mesh_path = fullfile(mrstPath('ls-proj'), 'gcs3D/diffusion/input_files/mesh/');
-fluid_path = fullfile(mrstPath('ls-proj'), 'gcs3D/diffusion/input_files/fluid_props/');
+% Paths
+topDir = what('diffusion');
+topDir = [topDir.path '/'];
+input_dir = what('input_files_diff');   % make sure gcs3D is on path
+mesh_path = [input_dir.path '/mesh/'];
+fluid_path = [input_dir.path '/fluid_props/'];
 
 % Options
 plotFigs = false;
 mesh    = 'fine';                             % 'coarse', 'medium', or 'fine'
 wellno  = 1;                                  % 1 or 2 injectors (TBD for 2)
-D       = 2e-11;                           % pseudo-molecular diffusivity (m^2/s)
+D       = 2e-11;                              % pseudo-molecular diffusivity (m^2/s)
 rate    = 8;                                  % max inj rate (mL/min, surface conditions) 
 folderName = ['example_mesh_', mesh, '_rate_', num2str(rate), '_depth_1km_D_' num2str(D)];
 
@@ -269,7 +270,7 @@ model = model.validateModel();
 
 % Diffusion
 if D > 0
-    diffFlux = BlackOilCO2TotalFluxWithDiffusion(model);
+    diffFlux = CO2TotalFluxWithDiffusion(model);
     diffFlux.componentDiffusion = [0 D];  % opt.D = diffusion coeff.
     diffFlux.faceAverage = true;
     model.FlowDiscretization.ComponentTotalFlux = diffFlux;
@@ -355,7 +356,7 @@ if isfield(nls.LinearSolver, 'amgcl_setup.nthreads')
     nls.LinearSolver.amgcl_setup.nthreads = N;   % Specify threads manually
 end
 problem = packSimulationProblem(state0, model, schedule, folderName, ...
-                                'Name', folderName, 'Directory', outputDir, ...
+                                'Name', folderName, 'Directory', topDir, ...
                                 'NonLinearSolver', nls);
 [ok, status] = simulatePackedProblem(problem);
 [wellSols, states, report] = getPackedSimulatorOutput(problem);

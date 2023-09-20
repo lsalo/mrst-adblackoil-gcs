@@ -1,0 +1,448 @@
+-----------------------------------------------------------------------
+-- 1. RUNSPEC (Required) 
+--It contains the run title, start date, units, various problem dimensions 
+--(numbers of blocks, wells, tables etc.)
+-----------------------------------------------------------------------
+RUNSPEC
+TITLE     -- title of the run
+Revised PUNQ-S3 (Metric, CO2 prop): "constant"-pressure BC, no hysteresis
+
+TABDIMS
+2 1 100/
+
+WELLDIMS
+--max number of wells in model
+--max connections per well
+--max number of groups
+--max number of wells per group
+10 10 2 10/
+
+DIMENS    -- dimensions of the model
+-- NX   NY   NZ
+19 28 5/
+
+-- specify the phases present for CO2 sequestration
+
+WATER
+GAS
+
+CART
+
+METRIC    -- unit specification
+
+--HYSTERESIS OPTION
+SATOPTS
+        'HYSTER'    /
+
+NOHYST
+
+START     -- starting date for simulation run
+  1 'JAN' 2000  /
+
+NSTACK
+30 /
+
+UNIFOUT
+
+------------------------------------------------------------------------
+-- 2. Grid (Required) 
+--The GRID section determines the basic geometry of the simulation grid and 
+--various rock properties (porosity, absolute permeability, net-to-gross 
+--ratios) in each grid cell. From this information, the program calculates the 
+--grid block pore volumes, mid-point depths and inter-block 
+--transmissibilities.
+------------------------------------------------------------------------ 
+GRID 
+
+INCLUDE
+'PUNQS3.PRP'
+/
+
+COPY
+PERMX PERMY /
+/
+
+INCLUDE
+  'PUNQS3.GEO'
+/
+ 
+--Depth of cell centres
+--MIDS
+--2660*840/
+
+-- request init and grid file, necessary for post processing
+INIT
+GRIDFILE
+1 /
+
+------------------------------------------------------------------------
+-- 3. EDIT (Optional) Instructions for modifying the pore volumes, block 
+--center depths, transmissibilities, diffusivities (for the Molecular 
+--Diffusion option), and nonneighbor connections (NNCs) computed by the 
+--program from the data entered in the GRID section.
+------------------------------------------------------------------------ 
+EDIT
+
+-- Modify pore volumes of boundary blocks to simulate constant-pressure
+
+MULTIPLY
+-- Array Constant Box
+   PORV  1000    19 19  2  2  1  1 /
+   PORV  1000    18 18  3  6  1  1 /
+   PORV  1000    19 19  7 22  1  1 /
+   PORV  1000    18 18 23 24  1  1 /
+   PORV  1000    16 17 25 25  1  1 /
+   PORV  1000    14 15 26 26  1  1 /
+   PORV  1000    12 13 27 27  1  1 /
+   PORV  1000     4 11 28 28  1  1 /
+   PORV  1000     3  3 27 27  1  1 /
+   PORV  1000     2  2 26 27  1  1 /
+   PORV  1000     1  1 23 25  1  1 /
+   PORV  1000     2  2 16 22  1  1 /
+   PORV  1000     3  3 15 15  1  1 /
+   PORV  1000     4  4 13 14  1  1 /
+   PORV  1000     5  5 10 12  1  1 /
+   PORV  1000     6  6  8  9  1  1 /
+   PORV  1000     7  7  7  7  1  1 /
+   PORV  1000     8  8  6  6  1  1 /
+   PORV  1000     9  9  5  5  1  1 /
+   PORV  1000    10 10  4  4  1  1 /
+   PORV  1000    11 13  3  3  1  1 /
+   PORV  1000    14 14  2  2  1  1 /
+   PORV  1000    15 18  1  1  1  1 /
+/
+
+------------------------------------------------------------------------
+-- 4. PROPS (Required)
+--The PROPS section of the input data contains pressure and saturation 
+--dependent properties of the reservoir fluids and rocks.
+------------------------------------------------------------------------
+PROPS     
+
+PVTW
+-- Pref   Bw       Cw       Muw      1/Muw(dMuw/dP)
+   138    1.0060   4.35E-5  0.813    7.4E-4 /
+
+-- pvt for dry gas (oil does not vaporize into gas phase)
+PVDG
+-- pressure 
+-- the gas formation volume factor at the pressure
+-- the gas viscosity at the reference pressure 
+-- Pref        Bg      Mug      
+   80.0   0.00769   0.0325
+  100.0   0.00403   0.0525
+  120.0   0.00285   0.0625
+  160.0   0.00241   0.0725
+  200.0   0.00224   0.0800
+  300.0   0.00204   0.0950
+/
+
+-- reference Pressure and rock compressibility
+ROCK 
+1.0    5E-5 /  
+
+-- oil wat gas @surface
+DENSITY
+-- OIL  WATER   GAS 
+800     1030    1.8 / 
+
+--KILLOUGH RELATIVE PERMEABILITY MODEL
+EHYSTR
+0.1  2  1.0  0.01   /
+
+SWFN
+--Sw    krw Pco    Experiment 2b 2P,WO, imbibition      
+    0.3100    0.0000         0
+    0.3338    0.0007         0
+    0.3576    0.0011         0
+    0.3814    0.0016         0
+    0.4052    0.0025         0
+    0.4290    0.0038         0
+    0.4528    0.0062         0
+    0.4766    0.0101         0
+    0.5003    0.0133         0
+    0.5241    0.0183         0
+    0.5479    0.0242         0
+    0.5717    0.0327         0
+    0.5955    0.0415         0
+    0.6193    0.0537         0
+    0.6431    0.0663         0
+    0.6669    0.0859         0
+    0.6907    0.1097         0
+    0.7145    0.1376         0
+    0.7383    0.1673         0
+    0.7621    0.2054         0
+    0.7859    0.2595         0
+    0.8097    0.3445         0
+    0.8334    0.4309         0
+    0.8572    0.5013         0
+    0.8810    0.5546         0
+    0.9048    0.5881         0
+    0.9286    0.6233         0
+    0.9524    0.6718         0
+    0.9762    0.8584         0
+    1.0000    1.0000         0
+/
+--Sw    krw Pco    Experiment 2b 2P,WO, imbibition      
+    0.3100    0.0000         0
+    0.3338    0.0007         0
+    0.3576    0.0011         0
+    0.3814    0.0016         0
+    0.4052    0.0025         0
+    0.4290    0.0038         0
+    0.4528    0.0062         0
+    0.4766    0.0101         0
+    0.5003    0.0133         0
+    0.5241    0.0183         0
+    0.5479    0.0242         0
+    0.5717    0.0327         0
+    0.5955    0.0415         0
+    0.6193    0.0537         0
+    0.6431    0.0663         0
+    0.6669    0.0859         0
+    0.6907    0.1097         0
+    0.7145    0.1376         0
+    0.7383    0.1673         0
+    0.7621    0.2054         0
+    0.7859    0.2595         0
+    0.8097    0.3445         0
+    0.8334    0.4309         0
+    0.8572    0.5013         0
+    0.8810    0.5546         0
+    0.9048    0.5881         0
+    0.9286    0.6233         0
+    0.9524    0.6718         0
+    0.9762    0.8584         0
+    1.0000    1.0000         0
+/
+
+SGFN
+--Sg    krg Pco    Experiment13a 2P,OG, drainage
+        0         0         0
+    0.0256    0.0015         0
+    0.0511    0.0040         0
+    0.0767    0.0080         0
+    0.1022    0.0166         0
+    0.1278    0.0357         0
+    0.1533    0.0501         0
+    0.1789    0.0666         0
+    0.2044    0.0869         0
+    0.2300    0.1046         0
+    0.2555    0.1214         0
+    0.2811    0.1434         0
+    0.3066    0.1659         0
+    0.3322    0.1869         0
+    0.3577    0.2078         0
+    0.3833    0.2425         0
+    0.4088    0.2790         0
+    0.4344    0.3180         0
+    0.4599    0.3476         0
+    0.4855    0.3816         0
+    0.5110    0.4354         0
+    0.5366    0.4933         0
+    0.5621    0.5485         0
+    0.5877    0.5976         0
+    0.6132    0.6467         0
+    0.6388    0.6959         0
+    0.6643    0.7450         0
+    0.690     0.7941         0
+/
+--Sg    krg Pco    Experiment?? 2P,OG, imbibition
+    0         0              0
+    0.4       0              0
+    0.4090    0.0002         0
+    0.4154    0.0251         0
+    0.4218    0.0509         0
+    0.4281    0.0712         0
+    0.4345    0.0861         0
+    0.4409    0.1011         0
+    0.4473    0.1205         0
+    0.4537    0.1420         0
+    0.4600    0.1636         0
+    0.4664    0.1827         0
+    0.4728    0.1978         0
+    0.4792    0.2129         0
+    0.4856    0.2279         0
+    0.4919    0.2430         0
+    0.4983    0.2575         0
+    0.5047    0.2695         0
+    0.5111    0.2815         0
+    0.5174    0.2935         0
+    0.5238    0.3055         0
+    0.5302    0.3175         0
+    0.5366    0.3560         0
+    0.5430    0.3983         0
+    0.5493    0.4406         0
+    0.5557    0.4829         0
+    0.5621    0.5099         0
+    0.5685    0.5283         0
+    0.5749    0.5467         0
+    0.5812    0.5651         0
+    0.5876    0.5836         0
+    0.5940    0.6020         0
+    0.6132    0.6467         0
+    0.6388    0.6959         0
+    0.6643    0.7450         0
+    0.690     0.7941         0
+/
+
+
+------------------------------------------------------------------------
+-- 5. Regions (Optional)
+--The REGIONS section divides the computational grid into regions 
+--If there is no REGIONS section, ECLIPSE puts all grid blocks into a 
+--single region for all operations.
+------------------------------------------------------------------------
+REGIONS
+
+SATNUM
+ 2660*1 /
+
+IMBNUM
+ 2660*2 /
+
+--------------------------------------------------------------------------
+-- 6. Solution (optional)
+--The SOLUTION section contains sufficient data to define the initial state 
+--(pressure,saturations,compositions) of every grid block in the reservoir.
+-------------------------------------------------------------------------- 
+
+SOLUTION   == initial state of solution variables ===================== 
+EQUIL      -- DATA FOR INITIALISING FLUIDS TO POTENTIAL EQUILIBRIUM 
+--    DATUM  DATUM   OWC     OWC    GOC    GOC    RSVD   RVVD   SOLN 
+--    DEPTH  PRESS   DEPTH   PCOW  DEPTH   PCOG  TABLE  TABLE   METH       
+       2355   89.2    2000     0     100      0      1      0      0
+/
+
+-------------------------------------------------------------------------------- 
+--7. Summary (optional)
+--specification of data to be written to the Summary file after each time step
+------------------------------------------------------------------------------
+SUMMARY  
+RUNSUM      -- additional table in *.PRT file
+SEPARATE    -- write a separate *.RSM file
+
+-- field reservoir pore volume
+FRPV
+
+-- field average pressure
+FPR
+
+-- block gas saturation
+BGSAT
+ 13 18 1/
+ 7 21 1/
+ 11 11 1/
+/
+
+-- block gas relative permeability
+BGKR
+ 13 18 1/
+ 7 21 1/
+ 11 11 1/
+/
+
+-- block dynamic trapped gas saturation (WAG hysteresis only)
+BGTPD
+ 13 18 1/
+ 7 21 1/
+ 11 11 1/
+/
+
+-- well bottom hole pressure
+WBHP
+/
+
+-----------------------------------------------------------------------
+-- 8. SCHEDULE (Required) 
+--The SCHEDULE section specifies the operations to be simulated (production
+--and injection controls and constraints) and the times at which output 
+--reports are required.
+----------------------------------------------------------------------- 
+SCHEDULE 
+RPTSCHED  -- Controls on output at each report time
+  'WELLS=2' 'WELSPECS'
+/
+
+RPTRST    -- no restart file!
+'BASIC=2'
+/
+
+TUNING
+/
+/           LITMIN      DDPLIM  DDSLIM
+12  1   25  3   8   8   0.0001  0.0001 /
+
+--ERROR HANDLEING
+MESSAGES
+9* 10000/
+
+WELSPECS ------------------------------------------------------
+--  3: I Location of well head or heal
+--  4: J Location of well head or heal  
+--  5: Reference depth for bottom hole pressure, default: center depth of the --     grid block
+--  7: Drainage radius for productivity / injectivity index calculation
+--  8: Flag for use of a special inflow equation to model the flow of gas
+--  9: 'STOP' Stop well above formation (allowing crossflow)
+--     'SHUT' Isolate well from the formation
+'INJ-01'   'G1'    4   21   1* 'GAS' 2* 'SHUT'/
+'INJ-02'   'G1'   10    9   1* 'GAS' 2* 'SHUT'/
+'INJ-03'   'G1'   19   16   1* 'GAS' 2* 'SHUT'/
+'INJ-04'   'G1'   14   25   1* 'GAS' 2* 'SHUT'/
+'INJ-05'   'G1'   10   24   1* 'GAS' 2* 'SHUT'/
+'INJ-06'   'G1'    9   16   1* 'GAS' 2* 'SHUT'/
+'INJ-07'   'G1'   16   11   1* 'GAS' 2* 'SHUT'/
+'INJ-08'   'G1'   17   22   1* 'GAS' 2* 'SHUT'/
+/
+
+
+COMPDAT   -- completion specification data
+'INJ-01'    4   21   5   5   'OPEN' 2*  0.15/
+'INJ-02'   10    9   5   5   'OPEN' 2*  0.15/
+'INJ-03'   19   16   5   5   'OPEN' 2*  0.15/
+'INJ-04'   14   25   5   5   'OPEN' 2*  0.15/
+'INJ-05'   10   24   5   5   'OPEN' 2*  0.15/
+'INJ-06'    9   16   5   5   'OPEN' 2*  0.15/
+'INJ-07'   17   11   5   5   'OPEN' 2*  0.15/
+'INJ-08'   17   22   5   5   'OPEN' 2*  0.15/
+/
+
+WCONINJE  -- injection well controls
+--NAME     TYPE    CTL   RATE
+'INJ-01'  GAS  'OPEN' 'RESV' 1* 18.0 300/
+'INJ-02'  GAS  'OPEN' 'RESV' 1* 18.0 300/
+'INJ-03'  GAS  'OPEN' 'RESV' 1* 18.0 300/
+'INJ-04'  GAS  'OPEN' 'RESV' 1* 18.0 300/
+'INJ-05'  GAS  'OPEN' 'RESV' 1* 18.0 300/
+'INJ-06'  GAS  'OPEN' 'RESV' 1* 18.0 300/
+'INJ-07'  GAS  'OPEN' 'RESV' 1* 18.0 300/
+'INJ-08'  GAS  'OPEN' 'RESV' 1* 18.0 300/
+/
+
+--Total pore volume is 3.52E6 rm3
+--Injection over 10 years (about 15%PV)
+
+TSTEP
+10*365.25
+/
+
+WCONINJE  -- injection well controls
+--NAME     TYPE    CTL   RATE
+'INJ-01'  GAS  'SHUT' 'RESV' 1* 1.2 300/
+'INJ-02'  GAS  'SHUT' 'RESV' 1* 1.2 300/
+'INJ-03'  GAS  'SHUT' 'RESV' 1* 1.2 300/
+'INJ-04'  GAS  'SHUT' 'RESV' 1* 1.2 300/
+'INJ-05'  GAS  'SHUT' 'RESV' 1* 1.2 300/
+'INJ-06'  GAS  'SHUT' 'RESV' 1* 1.2 300/
+'INJ-07'  GAS  'SHUT' 'RESV' 1* 1.2 300/
+'INJ-08'  GAS  'SHUT' 'RESV' 1* 1.2 300/
+/
+
+TSTEP
+40*365.25 10*1826.25 40*3652.5
+/
+
+END
+
+
+
