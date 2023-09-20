@@ -37,4 +37,4 @@ The module is organized as follows:
    Killough's SPE J (1974) model as in ECLIPSE for scanning curves. Includes 
    the hysteresis class and an example which uses the PUNQ model and 
    compares the result with that of ECLIPSE (Juanes et al., WRR 2006)
-3. Molecular diffusion (includes the diffusion class and an example inspired by work on the [FluidFlower](fluidflower.w.uib.no/)).
+3. Molecular diffusion (includes the diffusion class and an example inspired by work on the [FluidFlower](https://fluidflower.w.uib.no/)).
