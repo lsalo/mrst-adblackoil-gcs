@@ -13,7 +13,7 @@ The paper/preprint will appear here when published.
 ### Thesis
 ```
 @phdthesis{salo2023,
-  title={Numerical Modeling of Geologic Carbon Dioxide Storage in Faulted Siliciclastic Sequences},
+  title={Numerical Modeling of Geologic Carbon Dioxide Storage in Faulted Siliciclastic Settings},
   author={Saló-Salgado, Lluís},
   year={2023},
   school={Massachusetts Institute of Technology},
