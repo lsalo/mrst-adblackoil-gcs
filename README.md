@@ -6,9 +6,12 @@ Updates will be posted here after integration into MRST.
 
 ## Citation
 ### Paper
+```
 The paper/preprint will appear here when published.
+```
 
 ### Thesis
+```
 @phdthesis{salo2023,
   title={Numerical Modeling of Geologic Carbon Dioxide Storage in Faulted Siliciclastic Sequences},
   author={Saló-Salgado, Lluís},
@@ -17,6 +20,7 @@ The paper/preprint will appear here when published.
   doi={doi will be added here when available},
   note={Chapter 2}
 }
+```
 
 ## Description
 This module provides examples and advanced functionality for three-dimensional 
