@@ -1,8 +1,7 @@
 # mrst-adblackoil-gcs
-Provides examples and advanced functionality for 3D simulation of geologic CO2 storage as described in Saló-Salgado (2023). This code will be integrated into MRST in the near future, and updates will be provided below.
+Provides examples and advanced functionality for 3D simulation of geologic CO2 storage as described in Saló-Salgado (2024). 
 
-## Updates
-Updates will be posted here after integration into MRST.
+**Important note**: As of 4/25/2024, this code has been integrated into MRST (release 2024a). Therefore, the code in this repository is no longer needed if you use version 2024a or newer. Code and examples can be found in the co2lab-mit module, please see [the release notes](https://www.sintef.no/projectweb/mrst/download/release-notes-for-mrst-2024a/) for details.
 
 ## Citation
 ### Paper
